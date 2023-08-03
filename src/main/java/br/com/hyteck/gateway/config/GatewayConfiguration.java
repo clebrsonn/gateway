@@ -10,11 +10,16 @@ public class GatewayConfiguration {
     @Bean
     public RouteLocator customRouterLocator(RouteLocatorBuilder builder){
         return builder.routes()
-                .route("cloud-config", r -> r
+                .route("cloud config", r -> r
                         .path("/config/**")
                                 .filters(f -> f.rewritePath("/config/(?<params>.*)","/${params}" ))
                         .uri("lb://configServer")
                         )
+                .route("service discovery", r -> r
+                        .path("/eureka/**")
+                        .filters(f -> f.rewritePath("/config/(?<params>.*)","/${params}" ))
+                        .uri("lb://discovery")
+                )
                 .build();
     }
 }
